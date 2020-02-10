@@ -26,6 +26,7 @@ export const mutations = {
 
 export const actions = {
   // Nuxt 仅在服务端渲染的时候执行 nuxtServerInit 方法
+  // 参考文档：https://zh.nuxtjs.org/guide/vuex-store#nuxtserverinit-%E6%96%B9%E6%B3%95
   nuxtServerInit ({ commit }, { req }) {
     let user = null
 
@@ -35,6 +36,7 @@ export const actions = {
       // cookieparser.parse 就是把原始的 Cookie 格式字符串转为一个对象
       // { key: value, key: value }
       const parsed = cookieparser.parse(req.headers.cookie)
+
       try {
         // 将 Cookie 中的 user 的值转为 JavaScript 对象
         user = JSON.parse(parsed.user)

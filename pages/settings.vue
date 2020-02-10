@@ -28,6 +28,12 @@
 	              </button>
 	          </fieldset>
 	        </form>
+
+	        <hr>
+
+	        <button class="btn btn-outline-danger" @click="onLogout">
+	          Or click here to logout.
+	        </button>
 	      </div>
 
 	    </div>
@@ -36,7 +42,10 @@
 </template>
 
 <script>
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
+	middleware: 'authenticated',
   name: 'SettingsPage',
   components: {},
   props: {},
@@ -47,7 +56,18 @@ export default {
   watch: {},
   created () {},
   mounted () {},
-  methods: {}
+  methods: {
+  	onLogout () {
+  		// 删除 Cookie 中的用户登录状态
+  		Cookie.remove('user')
+
+  		// 删除容器中的用户登录状态
+  		this.$store.commit('setUser', null)
+
+  		// 回到首页
+  		this.$router.push('/')
+  	}
+  }
 }
 </script>
 
