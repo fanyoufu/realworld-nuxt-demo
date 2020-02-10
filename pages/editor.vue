@@ -32,6 +32,8 @@
 
 <script>
 export default {
+	// Nuxt 提供的一个特殊的 API，在渲染页面的时候会自动调用这个中间件模块中导出的函数
+	middleware: 'authenticated',
   name: 'EditorPage',
   components: {},
   props: {},

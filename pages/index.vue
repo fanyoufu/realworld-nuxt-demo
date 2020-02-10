@@ -48,14 +48,12 @@
 	          <p>Popular Tags</p>
 
 	          <div class="tag-list">
-	            <a href="" class="tag-pill tag-default">programming</a>
-	            <a href="" class="tag-pill tag-default">javascript</a>
-	            <a href="" class="tag-pill tag-default">emberjs</a>
-	            <a href="" class="tag-pill tag-default">angularjs</a>
-	            <a href="" class="tag-pill tag-default">react</a>
-	            <a href="" class="tag-pill tag-default">mean</a>
-	            <a href="" class="tag-pill tag-default">node</a>
-	            <a href="" class="tag-pill tag-default">rails</a>
+	            <a
+	            	href=""
+	            	class="tag-pill tag-default"
+	            	v-for="(tag, index) in tags"
+	            	:key="index"
+	            >{{ tag }}</a>
 	          </div>
 	        </div>
 	      </div>
@@ -69,19 +67,39 @@
 
 <script>
 import { getArticles } from '@/api/article'
+import { getTags } from '@/api/tag'
 
 export default {
   name: 'HomePage',
   components: {},
   props: {},
+  // 虽然 asyncData 和 data 中的数据会合并到一起给组件使用，但是建议保持统一，都写到 asyncData 中
   async asyncData () {
+  	// await 会等待后面的异步操作执行结束然后才往下继续执行
   	const { data } = await getArticles()
+
+  	const { data: tagData } = await getTags()
+
+  	// Promise.all 方法：接收一个数组，数组中存储 Promise 对象，当数组中所有的 Promise 都 resolve 成功之后，Promise.all 也就 resolved 成功了
+  	// 返回值：一个数组，按照任务的顺序存储任务的结果
+  	// [ 任务1的结果, 任务2的结果 ]
+  	// Promise 是 ECMAScript 6 的 API
+  	const [articleRes, tagRes] = await Promise.all([getArticles(), getTags()])
+
   	return {
-  		articles: data.articles
+  		articles: articleRes.data.articles,
+  		tags: tagRes.data.tags
   	}
+
+  	// return {
+  	// 	articles: data.articles,
+  	// 	tags: tagData.tags
+  	// }
   },
   data () {
-    return {}
+    return {
+    	message: ''
+    }
   },
   computed: {},
   watch: {},
